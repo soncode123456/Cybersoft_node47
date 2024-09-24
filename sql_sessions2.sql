@@ -1,20 +1,19 @@
-# Tạo cơ sở dữ liệu
-CREATE DATABASE node47;
+# tạo cơ sở dữ liệu
+CREATE DATABASE node47
 USE node47
-
-# Tạo table, Data
-# Tạo table users
-# 3 KIỂU DỮ LIÊU CHÍNH
-# - NUMBER: interger, float,...
-# - String: VARCHAR, TEXT,...
-# - datetime: (timestamp, day,...)
+# tạo table, DATA
+# tạo table users
+# 3 KIỂU DỮ LIỆU CHÍNH:
+# - Number: integer, float,....
+# - String: VARCHAR, TEXT, .....
+# - datetime (timestamp, day,...)
 CREATE TABLE users(
 	full_name VARCHAR(100),
 	email VARCHAR(255),
 	age INT,
 	pass_word VARCHAR(255)
 );
-# Tạo data cho table users
+# tạo data cho table users
 INSERT INTO users (full_name, email, age, pass_word) VALUES 
 ('Nguyen Van A', 'nguyenvana@example.com', 25, 'password123'),
 ('Le Thi B', 'lethib@example.com', 30, 'passw0rd!'),
@@ -36,99 +35,80 @@ INSERT INTO users (full_name, email, age, pass_word) VALUES
 ('Do Van Q', 'dovanq@example.com', 28, 'quypasspass!'),
 ('Nguyen Thi R', 'nguyenthir@example.com', 23, 'securepassR@123'),
 ('Le Van S', 'levans@example.com', 21, 'Spasswordstrong!');
-
-INSERT INTO users (email, age, pass_word) VALUES 
-('ahihi@gmail.com', 35, 'ahihi1234')
-
-# Viết câu query để get data
+INSERT INTO users (email, age, pass_word) VALUES
+('ahihi@gmail.com', 35, '1234567')
+# viết câu query để get data
 # *: lấy hết tất cả data trong table
 SELECT * FROM users
 SELECT full_name AS 'Họ tên', email FROM users
-
-# lấy những người có tuổi từ 20 - 25 tuổi và sắp xếp
-# tăng dần ( giảm dần )
+# lấy những người có tuổi từ 20-25 tuổi và sắp xếp
+# tăng dần (giảm dần)
 # cách 1:
 SELECT * FROM users
-WHERE 20 <= age and age <= 25
-ORDER BY age ASC # keyword để sắp xếp data: order by... (asc, desc)
+WHERE 20 <= age and age <=25
+ORDER BY age DESC # keyword để sắp xếp data: order by....(asc, desc)
 LIMIT 5
-
-# Liệt kê những người có tuổi lớn nhất
+# liệt kê những người có tuổi lớn nhất
 # cách 1:
 # B1: tìm tuổi lớn nhất trong danh sách users
-# B2: lấy những người có tuổi lớn nhất
-
+# b2: lấy những người có tuổi lớn nhất
 select * from users
 where age = (
 	select age from users
 	order by age desc
 	limit 1
 )
-
-# cách 2: keywword MAX  hoặc MIN
+# cách 2: keyword MAX hoặc MIN
 select * from users
-WHERE age = (select max(age) from users)
-
+where age = (select max(age) from users)
 # tìm những người có họ Lê trong danh sách
-# => keywword LIKE (tìm tương đối)
-SELECT * FROM users
-WHERE full_name LIKE '%Le%'
-# Le% => tìm những người có chữ Le ở đầu chuỗi: Le1, Le Van, Le Thi,...
-# %Le => tìm những người có chữ Le ở cuối chuỗi: Nguyen Van Le, Trai Le,...
-# %Le% => kết hợp của Le%  và %Le => tìm những người có chữ Le 
-# (Le ở đầu , Le ở cuối, Le ở giữa)
-
+# => keyword LIKE (tìm tương đối)
+select * from users
+where full_name like '%Le%'
+# Le% => tìm những người có chữ Le ở đầu chuỗi: Le1, Le Van, Le Thi,....
+# %Le => tìm những người có chữ Le ở cuỗi chuỗi: Nguyen Van Le, Trai Le,...
+# %Le% => kết hợp của Le% và %Le => tìm những người có chữ Le
+# (Le ở đầu, Le ở cuối, Le ở giữa)
 SELECT DISTINCT full_name from users
-
 # đếm có bao nhiêu users trong table
 # => COUNT
 SELECT COUNT(*) from users
-
-# thêm 2 column address và phone cho table users 
-# => update table thay vì xóa table và tạo lại 
-# thêm column mới 
+# thêm 2 column address và phone cho table users
+# => update table thay vì xóa table và tạo lại
+# thêm column mới
 alter table users
 add column address VARCHAR(255),
-add column phone VARCHAR(15) 
-
-# thay đổi kiểu dữ kiệu cho column đó (address)
-alter table users 
+add column phone VARCHAR(15)
+# thay đổi kiểu dữ liệu cho column đó (address)
+alter table users
 modify address varchar(100)
-
 # thêm ràng buộc (constraint) cho column
 alter table users
-modify column full_name VARCHAR(100) not null 
-
-INSERT into users(, email, age, pass_word, address) VALUES
+modify column full_name VARCHAR(100) not null
+INSERT into users(email, age, pass_word, address) VALUES
 ('test@gmail.com', 30, '123456', 'Quan 3')
 # => error: Field 'full_name' doesn't have a default value
-
 # cách 2:
-# between... and ....
+# between....and.....
 SELECT * FROM users
 where age BETWEEN 20 and 25
-
 # 20 <= age <= 30
 # 20 <= age and age <= 30
-
 # khóa chính (primary key)
 # column trong table nhưng dùng để xác định data đó là duy nhất, để query 1 phần tử
 # thêm khóa chính cho table users
-ALTER table users 
+alter table users
 add column user_id INT PRIMARY KEY AUTO_INCREMENT
-
 INSERT INTO users (full_name, age, email) VALUES
 ('cyber', 30, 'cyber@gmail.com')
 select user_id, full_name from users
-
-# Tổng kết
+# TỔNG KẾT
 # create database, table, column, data
-# query (select ... from <tên table>)
+# query (select .... from <tên table>)
 # filter (WHERE)
-# Tìm data trong khoảng ... (between ... and)
-# update table (add column mới, update data type column,
-# thêm ràng buộc) => alter table <tên table> ...
-# sub query (tìm người có tuổi lón nhất)
-
+# TÌM DATA TRONG KHOẢNG...(BETWEEN....AND)
+# update table (add column mới, update datatype column,
+# thêm ràng buộc) => alter table <tên table>...
+# sub query (tìm người có tuổi lớn nhất (nhỏ nhất))
+# tìm kiếm chuỗi (LIKE)
 # query, insert, update, delete
-
